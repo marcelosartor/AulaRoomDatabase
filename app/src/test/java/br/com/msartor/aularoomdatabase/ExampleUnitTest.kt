@@ -1,4 +1,4 @@
-package br.com.kfgdistribuidora.aularoomdatabase
+package br.com.msartor.aularoomdatabase
 
 import org.junit.Test
 

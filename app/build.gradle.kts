@@ -7,11 +7,11 @@ plugins {
 
 
 android {
-    namespace = "br.com.kfgdistribuidora.aularoomdatabase"
+    namespace = "br.com.msartor.aularoomdatabase"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "br.com.kfgdistribuidora.aularoomdatabase"
+        applicationId = "br.com.msartor.aularoomdatabase"
         minSdk = 24
         targetSdk = 35
         versionCode = 1
@@ -34,8 +34,8 @@ android {
         jvmTarget = "1.8"
     }
     buildFeatures {
-        dataBinding = true
-        viewBinding = true
+        dataBinding=true
+        viewBinding=true
     }
 }
 
