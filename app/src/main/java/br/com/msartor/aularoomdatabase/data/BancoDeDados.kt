@@ -9,8 +9,6 @@ import br.com.msartor.aularoomdatabase.data.model.Usuario
 
 @Database(entities = [Usuario::class], version = 1)
 abstract class BancoDeDados: RoomDatabase() {
-
-    abstract fun recuperarUsuarioDao(): UsuarioDao
     companion object {
         fun getInstance(context: Context): BancoDeDados {
             return Room.databaseBuilder(
@@ -20,4 +18,6 @@ abstract class BancoDeDados: RoomDatabase() {
             ).build()
         }
     }
+
+    abstract fun getInstanceUsuarioDao(): UsuarioDao
 }
