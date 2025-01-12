@@ -8,6 +8,19 @@
     tools:context=".MainActivity">
 
     <EditText
+        android:id="@+id/editId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:inputType="text"
+        android:text="Digite Id"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
         android:id="@+id/editNome"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -16,9 +29,9 @@
         android:inputType="text"
         android:text="Digite nome"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/editId" />
+
 
     <Button
         android:id="@+id/btnSalvar"
@@ -32,15 +45,15 @@
         app:layout_constraintTop_toBottomOf="@+id/editNome" />
 
     <Button
-        android:id="@+id/btn_remover"
+        android:id="@+id/btnRemover"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="12dp"
         android:text="Remover"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.506"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnSalvar" />
+        app:layout_constraintTop_toBottomOf="@+id/btnAtualizar" />
 
     <Button
         android:id="@+id/btnAtualizar"
@@ -49,9 +62,9 @@
         android:layout_marginTop="16dp"
         android:text="Atualizar"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.504"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_remover" />
+        app:layout_constraintTop_toBottomOf="@+id/btnSalvar" />
 
     <Button
         android:id="@+id/btnListar"
@@ -62,7 +75,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnAtualizar" />
+        app:layout_constraintTop_toBottomOf="@+id/btnRemover" />
+
+    <Button
+        android:id="@+id/btnFiltrar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Listar com Filtro"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnListar" />
 
     <TextView
         android:id="@+id/txtListaDeUsuarios"
@@ -76,5 +100,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnListar" />
+        app:layout_constraintTop_toBottomOf="@+id/btnFiltrar" />
 </androidx.constraintlayout.widget.ConstraintLayout>

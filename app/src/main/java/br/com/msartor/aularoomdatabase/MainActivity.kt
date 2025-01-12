@@ -5,6 +5,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import br.com.msartor.aularoomdatabase.data.BancoDeDados
 import br.com.msartor.aularoomdatabase.data.dao.UsuarioDao
+import br.com.msartor.aularoomdatabase.data.model.Endereco
 import br.com.msartor.aularoomdatabase.data.model.Usuario
 import br.com.msartor.aularoomdatabase.databinding.ActivityMainBinding
 import kotlinx.coroutines.CoroutineScope
@@ -34,7 +35,8 @@ class MainActivity : AppCompatActivity() {
                 "teste@teste.com",
                 "123456",
                 52,
-                82.0
+                82.0,
+                Endereco("Carlos JG",61)
             )
             CoroutineScope(Dispatchers.IO).launch {
                 usuarioDao.salvar(usuario)
@@ -42,29 +44,20 @@ class MainActivity : AppCompatActivity() {
 
             binding.txtListaDeUsuarios.text = "salvar"
         }
-        binding.btnListar.setOnClickListener{
-            CoroutineScope(Dispatchers.IO).launch {
-                val listaUsuario = usuarioDao.listar()
-                var textUsuarios = ""
-                listaUsuario.forEach {
-                    textUsuarios += "\n${it.id}-${it.nome}"
-                }
-                withContext( Dispatchers.Main) {
-                    binding.txtListaDeUsuarios.text = textUsuarios
-                }
-            }
 
-        }
+
 
         binding.btnAtualizar.setOnClickListener {
             val nome = binding.editNome.text.toString()
+            val id = binding.editId.text.toString().toInt()
             val usuario = Usuario(
-                5,
+                id,
                 nome,
                 "teste@teste.com",
                 "123456",
                 24,
-                82.0
+                82.0,
+                Endereco("Carlos J.Gon",61)
             )
             CoroutineScope(Dispatchers.IO).launch {
                 usuarioDao.atualizat(usuario)
@@ -73,18 +66,49 @@ class MainActivity : AppCompatActivity() {
             binding.txtListaDeUsuarios.text = "Atualizar"
         }
         binding.btnRemover.setOnClickListener {
+            val id = binding.editId.text.toString().toInt()
             val usuario = Usuario(
-                4,
+                id,
                 "Ruff111",
                 "teste@teste.com",
                 "123456",
                 52,
-                82.0
+                82.0,
+                Endereco("Carlos JG",61)
             )
             CoroutineScope(Dispatchers.IO).launch {
                 usuarioDao.remover(usuario)
             }
             binding.txtListaDeUsuarios.text = "Remover"
+        }
+
+        binding.btnListar.setOnClickListener{
+            CoroutineScope(Dispatchers.IO).launch {
+                val listaUsuario = usuarioDao.listar()
+                var textUsuarios = ""
+                listaUsuario.forEach {
+                    textUsuarios += "\n${it.id}-${it.nome} [End:${it.endereco.rua.trim()},${it.endereco.numero} ]"
+                }
+                withContext( Dispatchers.Main) {
+                    binding.txtListaDeUsuarios.text = textUsuarios
+                }
+            }
+
+        }
+
+        binding.btnFiltrar.setOnClickListener{
+            CoroutineScope(Dispatchers.IO).launch {
+                val textoPesquisa = binding.editNome.text.toString()
+                val listaUsuario = usuarioDao.filtrar(textoPesquisa)
+                var textUsuarios = ""
+                listaUsuario.forEach {
+                    textUsuarios += "\n${it.id}-${it.nome} [End:${it.endereco.rua.trim()},${it.endereco.numero} ]"
+                }
+                withContext( Dispatchers.Main) {
+                    binding.txtListaDeUsuarios.text = textUsuarios
+                }
+            }
+
         }
     }
 }

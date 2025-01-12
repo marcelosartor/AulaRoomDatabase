@@ -20,4 +20,8 @@ interface UsuarioDao {
 
     @Query("Select * from usuarios Order by nome")
     fun listar() : List<Usuario>
+
+    //@Query("Select * from usuarios where id = :textoPesquisa Order by nome")
+    @Query("Select * from usuarios where nome like '%' || :textoPesquisa || '%' Order by nome")
+    fun filtrar(textoPesquisa: String): List<Usuario>
 }
