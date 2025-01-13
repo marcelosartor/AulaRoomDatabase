@@ -12,6 +12,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
 
 
 class MainActivity : AppCompatActivity() {
@@ -36,7 +39,10 @@ class MainActivity : AppCompatActivity() {
                 "123456",
                 52,
                 82.0,
-                Endereco("Carlos JG",61)
+                Endereco("Carlos JG",61),
+                LocalDate.now(),
+                LocalTime.now(),
+                LocalDateTime.now()
             )
             CoroutineScope(Dispatchers.IO).launch {
                 usuarioDao.salvar(usuario)
@@ -57,7 +63,10 @@ class MainActivity : AppCompatActivity() {
                 "123456",
                 24,
                 82.0,
-                Endereco("Carlos J.Gon",61)
+                Endereco("Carlos J.Gon",61),
+                LocalDate.now(),
+                LocalTime.now(),
+                LocalDateTime.now()
             )
             CoroutineScope(Dispatchers.IO).launch {
                 usuarioDao.atualizat(usuario)
@@ -74,7 +83,10 @@ class MainActivity : AppCompatActivity() {
                 "123456",
                 52,
                 82.0,
-                Endereco("Carlos JG",61)
+                Endereco("Carlos JG",61),
+                LocalDate.now(),
+                LocalTime.now(),
+                LocalDateTime.now()
             )
             CoroutineScope(Dispatchers.IO).launch {
                 usuarioDao.remover(usuario)
@@ -87,7 +99,12 @@ class MainActivity : AppCompatActivity() {
                 val listaUsuario = usuarioDao.listar()
                 var textUsuarios = ""
                 listaUsuario.forEach {
-                    textUsuarios += "\n${it.id}-${it.nome} [End:${it.endereco.rua.trim()},${it.endereco.numero} ]"
+                    textUsuarios += "\n${it.id}-${it.nome}" +
+                            "\n[End:${it.endereco.rua.trim()},${it.endereco.numero} ]" +
+                            "\nData: ${it.date}" +
+                            "\nTime: ${it.time}" +
+                            "\nDataTime: ${it.dateTime}" +
+                            "\n----------------------------------------"
                 }
                 withContext( Dispatchers.Main) {
                     binding.txtListaDeUsuarios.text = textUsuarios
@@ -102,7 +119,10 @@ class MainActivity : AppCompatActivity() {
                 val listaUsuario = usuarioDao.filtrar(textoPesquisa)
                 var textUsuarios = ""
                 listaUsuario.forEach {
-                    textUsuarios += "\n${it.id}-${it.nome} [End:${it.endereco.rua.trim()},${it.endereco.numero} ]"
+                    textUsuarios += "\n${it.id}-${it.nome}" +
+                            "\n[End:${it.endereco.rua.trim()},${it.endereco.numero} ]" +
+                            "\nData: ${it.date}" +
+                            "\n----------------------------------------"
                 }
                 withContext( Dispatchers.Main) {
                     binding.txtListaDeUsuarios.text = textUsuarios
