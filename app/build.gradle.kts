@@ -1,9 +1,9 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.ksp) // Carregar o plugin KSP
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.room)
 }
-
 
 
 android {
@@ -36,6 +36,10 @@ android {
     buildFeatures {
         dataBinding=true
         viewBinding=true
+    }
+    // Migrações
+    room {
+        schemaDirectory("$projectDir/schemas")
     }
 }
 

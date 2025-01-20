@@ -67,6 +67,7 @@ class MainActivity : AppCompatActivity() {
                 LocalDate.now(),
                 LocalTime.now(),
                 LocalDateTime.now()
+
             )
             CoroutineScope(Dispatchers.IO).launch {
                 usuarioDao.atualizat(usuario)
@@ -99,7 +100,7 @@ class MainActivity : AppCompatActivity() {
                 val listaUsuario = usuarioDao.listar()
                 var textUsuarios = ""
                 listaUsuario.forEach {
-                    textUsuarios += "\n${it.id}-${it.nome}" +
+                    textUsuarios += "\n${it.id}-${it.nome}"+
                             "\n[End:${it.endereco.rua.trim()},${it.endereco.numero} ]" +
                             "\nData: ${it.date}" +
                             "\nTime: ${it.time}" +

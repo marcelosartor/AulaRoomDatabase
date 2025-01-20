@@ -28,6 +28,9 @@ data class Usuario(
     val time: LocalTime,
     @ColumnInfo(name = "date_time")
     val dateTime: LocalDateTime,
+    //@ColumnInfo(name = "sexo_usuario", defaultValue = "")
+    //val sexoUsuario: String = ""
+
 )
 
 data class Endereco(
