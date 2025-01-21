@@ -22,8 +22,8 @@ data class Usuario(
     val senha: String,
     val idade: Int,
     val peso: Double,
-    @Embedded
-    val endereco: Endereco,
+    //@Embedded
+    //val endereco: Endereco,
     val date: LocalDate,
     val time: LocalTime,
     @ColumnInfo(name = "date_time")
@@ -32,11 +32,13 @@ data class Usuario(
     //val sexoUsuario: String = ""
 
 )
-
+/*
 data class Endereco(
     val rua: String,
     val numero: Int
 )
+*/
+
 
 @ProvidedTypeConverter
 class Conversor{
