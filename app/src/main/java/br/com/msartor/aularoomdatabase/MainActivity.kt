@@ -4,8 +4,10 @@ import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import br.com.msartor.aularoomdatabase.data.BancoDeDados
+import br.com.msartor.aularoomdatabase.data.dao.EnderecoDao
 import br.com.msartor.aularoomdatabase.data.dao.UsuarioDao
 import br.com.msartor.aularoomdatabase.data.model.Endereco
+//import br.com.msartor.aularoomdatabase.data.model.Endereco
 import br.com.msartor.aularoomdatabase.data.model.Usuario
 import br.com.msartor.aularoomdatabase.databinding.ActivityMainBinding
 import kotlinx.coroutines.CoroutineScope
@@ -21,6 +23,7 @@ class MainActivity : AppCompatActivity() {
     private val binding by lazy {   ActivityMainBinding.inflate(layoutInflater)   }
     private lateinit var bancoDeDados: BancoDeDados
     private lateinit var usuarioDao: UsuarioDao
+    private lateinit var enderecoDao: EnderecoDao
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,7 +31,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         bancoDeDados = BancoDeDados.getInstance(this)
-        usuarioDao = bancoDeDados.getInstanceUsuarioDao()
+        usuarioDao = bancoDeDados.usuarioDao
+        enderecoDao = bancoDeDados.enderecoDao
 
         binding.btnSalvar.setOnClickListener {
             val nome = binding.editNome.text.toString()
@@ -39,13 +43,18 @@ class MainActivity : AppCompatActivity() {
                 "123456",
                 52,
                 82.0,
-                Endereco("Carlos JG",61),
+                //Endereco("Carlos JG",61),
                 LocalDate.now(),
                 LocalTime.now(),
                 LocalDateTime.now()
             )
+            val endereco = Endereco(
+                0,"Rua tal",20
+            )
+
             CoroutineScope(Dispatchers.IO).launch {
                 usuarioDao.salvar(usuario)
+                enderecoDao.salvar(endereco)
             }
 
             binding.txtListaDeUsuarios.text = "salvar"
@@ -63,7 +72,7 @@ class MainActivity : AppCompatActivity() {
                 "123456",
                 24,
                 82.0,
-                Endereco("Carlos J.Gon",61),
+                //Endereco("Carlos J.Gon",61),
                 LocalDate.now(),
                 LocalTime.now(),
                 LocalDateTime.now()
@@ -84,7 +93,7 @@ class MainActivity : AppCompatActivity() {
                 "123456",
                 52,
                 82.0,
-                Endereco("Carlos JG",61),
+                //Endereco("Carlos JG",61),
                 LocalDate.now(),
                 LocalTime.now(),
                 LocalDateTime.now()
@@ -101,7 +110,7 @@ class MainActivity : AppCompatActivity() {
                 var textUsuarios = ""
                 listaUsuario.forEach {
                     textUsuarios += "\n${it.id}-${it.nome}"+
-                            "\n[End:${it.endereco.rua.trim()},${it.endereco.numero} ]" +
+                            //"\n[End:${it.endereco.rua.trim()},${it.endereco.numero} ]" +
                             "\nData: ${it.date}" +
                             "\nTime: ${it.time}" +
                             "\nDataTime: ${it.dateTime}" +
@@ -121,7 +130,7 @@ class MainActivity : AppCompatActivity() {
                 var textUsuarios = ""
                 listaUsuario.forEach {
                     textUsuarios += "\n${it.id}-${it.nome}" +
-                            "\n[End:${it.endereco.rua.trim()},${it.endereco.numero} ]" +
+                            //"\n[End:${it.endereco.rua.trim()},${it.endereco.numero} ]" +
                             "\nData: ${it.date}" +
                             "\n----------------------------------------"
                 }
