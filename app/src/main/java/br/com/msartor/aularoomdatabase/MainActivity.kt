@@ -5,8 +5,11 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import br.com.msartor.aularoomdatabase.data.BancoDeDados
 import br.com.msartor.aularoomdatabase.data.dao.EnderecoDao
+import br.com.msartor.aularoomdatabase.data.dao.ProdutoDao
 import br.com.msartor.aularoomdatabase.data.dao.UsuarioDao
 import br.com.msartor.aularoomdatabase.data.model.Endereco
+import br.com.msartor.aularoomdatabase.data.model.Produto
+import br.com.msartor.aularoomdatabase.data.model.ProdutoDetalhe
 //import br.com.msartor.aularoomdatabase.data.model.Endereco
 import br.com.msartor.aularoomdatabase.data.model.Usuario
 import br.com.msartor.aularoomdatabase.databinding.ActivityMainBinding
@@ -24,6 +27,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var bancoDeDados: BancoDeDados
     private lateinit var usuarioDao: UsuarioDao
     private lateinit var enderecoDao: EnderecoDao
+    private lateinit var produtoDao: ProdutoDao
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,29 +37,14 @@ class MainActivity : AppCompatActivity() {
         bancoDeDados = BancoDeDados.getInstance(this)
         usuarioDao = bancoDeDados.usuarioDao
         enderecoDao = bancoDeDados.enderecoDao
+        produtoDao = bancoDeDados.produtoDao
+
 
         binding.btnSalvar.setOnClickListener {
-            val nome = binding.editNome.text.toString()
-            val usuario = Usuario(
-                0,
-                nome,
-                "teste@teste.com",
-                "123456",
-                52,
-                82.0,
-                //Endereco("Carlos JG",61),
-                LocalDate.now(),
-                LocalTime.now(),
-                LocalDateTime.now()
-            )
-            val endereco = Endereco(
-                0,"Rua tal",20
-            )
+            // Exemplo - Salvar Usuario
+            //salvarUsuario()
+            salvarProduto()
 
-            CoroutineScope(Dispatchers.IO).launch {
-                usuarioDao.salvar(usuario)
-                enderecoDao.salvar(endereco)
-            }
 
             binding.txtListaDeUsuarios.text = "salvar"
         }
@@ -139,6 +128,51 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
+        }
+    }
+
+    private fun salvarUsuario() {
+        val nome = binding.editNome.text.toString()
+        val usuario = Usuario(
+            0,
+            nome,
+            "teste@teste.com",
+            "123456",
+            52,
+            82.0,
+            //Endereco("Carlos JG",61),
+            LocalDate.now(),
+            LocalTime.now(),
+            LocalDateTime.now()
+        )
+        val endereco = Endereco(
+            0, "Rua tal", 20
+        )
+
+        CoroutineScope(Dispatchers.IO).launch {
+            usuarioDao.salvar(usuario)
+            enderecoDao.salvar(endereco)
+        }
+    }
+
+    private fun salvarProduto() {
+        val nome = binding.editNome.text.toString()
+        CoroutineScope(Dispatchers.IO).launch {
+            val produto = Produto(
+                0,
+                nome,
+                preco = 1200.90
+            )
+            val produtoId = produtoDao.salvarProduto(produto)
+
+            val produtoDetalhe = ProdutoDetalhe(
+                0,
+                produtoId,
+                "Marca ${produtoId}",
+                "Produto ${produtoId}"
+            )
+
+            val produtoDetalheId = produtoDao.salvarProdutoDetalhe(produtoDetalhe)
         }
     }
 }

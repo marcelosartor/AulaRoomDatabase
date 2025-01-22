@@ -9,6 +9,7 @@ import androidx.room.TypeConverters
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import br.com.msartor.aularoomdatabase.data.dao.EnderecoDao
+import br.com.msartor.aularoomdatabase.data.dao.ProdutoDao
 import br.com.msartor.aularoomdatabase.data.dao.UsuarioDao
 import br.com.msartor.aularoomdatabase.data.migration.Migration2To3
 import br.com.msartor.aularoomdatabase.data.migration.Migration3To4
@@ -16,13 +17,17 @@ import br.com.msartor.aularoomdatabase.data.migration.Migration4To5
 import br.com.msartor.aularoomdatabase.data.migration.Migration5To6
 import br.com.msartor.aularoomdatabase.data.model.Conversor
 import br.com.msartor.aularoomdatabase.data.model.Endereco
+import br.com.msartor.aularoomdatabase.data.model.Produto
+import br.com.msartor.aularoomdatabase.data.model.ProdutoDetalhe
 import br.com.msartor.aularoomdatabase.data.model.Usuario
 
 @Database(
     entities = [
         Usuario::class,
-        Endereco::class
-               ],
+        Endereco::class,
+        Produto::class,
+        ProdutoDetalhe::class
+    ],
     version = 6,
     autoMigrations = [
         AutoMigration(from = 1, to = 2),
@@ -36,6 +41,7 @@ abstract class BancoDeDados: RoomDatabase() {
     //abstract fun getInstanceUsuarioDao(): UsuarioDao
     abstract val usuarioDao: UsuarioDao
     abstract val enderecoDao: EnderecoDao
+    abstract val produtoDao: ProdutoDao
 
     companion object {
 
