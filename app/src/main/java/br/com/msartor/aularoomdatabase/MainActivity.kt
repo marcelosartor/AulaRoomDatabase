@@ -7,11 +7,11 @@ import br.com.msartor.aularoomdatabase.data.BancoDeDados
 import br.com.msartor.aularoomdatabase.data.dao.EnderecoDao
 import br.com.msartor.aularoomdatabase.data.dao.ProdutoDao
 import br.com.msartor.aularoomdatabase.data.dao.UsuarioDao
-import br.com.msartor.aularoomdatabase.data.model.Endereco
-import br.com.msartor.aularoomdatabase.data.model.Produto
-import br.com.msartor.aularoomdatabase.data.model.ProdutoDetalhe
+import br.com.msartor.aularoomdatabase.data.entity.Endereco
+import br.com.msartor.aularoomdatabase.data.entity.Produto
+import br.com.msartor.aularoomdatabase.data.entity.ProdutoDetalhe
 //import br.com.msartor.aularoomdatabase.data.model.Endereco
-import br.com.msartor.aularoomdatabase.data.model.Usuario
+import br.com.msartor.aularoomdatabase.data.entity.Usuario
 import br.com.msartor.aularoomdatabase.databinding.ActivityMainBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -94,6 +94,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.btnListar.setOnClickListener{
+            /*
             CoroutineScope(Dispatchers.IO).launch {
                 val listaUsuario = usuarioDao.listar()
                 var textUsuarios = ""
@@ -109,6 +110,22 @@ class MainActivity : AppCompatActivity() {
                     binding.txtListaDeUsuarios.text = textUsuarios
                 }
             }
+            */
+            CoroutineScope(Dispatchers.IO).launch {
+                val listaProdutos = produtoDao.listarProdutosEProdutoDetalhe()
+                var textProdutos = ""
+                listaProdutos.forEach {
+                      textProdutos += "\n${it.produto.id}-${it.produto.nome}"+
+                            "\nPreço: ${it.produto.preco}" +
+                            "\nMarca: ${it.produtoDetalhe.marca}" +
+                            "\nDescricao: ${it.produtoDetalhe.descricao}" +
+                            "\n----------------------------------------"
+                }
+                withContext( Dispatchers.Main) {
+                    binding.txtListaDeUsuarios.text = textProdutos
+                }
+            }
+
 
         }
 

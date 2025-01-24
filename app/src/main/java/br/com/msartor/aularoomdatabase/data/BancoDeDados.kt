@@ -6,8 +6,6 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import androidx.room.migration.Migration
-import androidx.sqlite.db.SupportSQLiteDatabase
 import br.com.msartor.aularoomdatabase.data.dao.EnderecoDao
 import br.com.msartor.aularoomdatabase.data.dao.ProdutoDao
 import br.com.msartor.aularoomdatabase.data.dao.UsuarioDao
@@ -15,11 +13,11 @@ import br.com.msartor.aularoomdatabase.data.migration.Migration2To3
 import br.com.msartor.aularoomdatabase.data.migration.Migration3To4
 import br.com.msartor.aularoomdatabase.data.migration.Migration4To5
 import br.com.msartor.aularoomdatabase.data.migration.Migration5To6
-import br.com.msartor.aularoomdatabase.data.model.Conversor
-import br.com.msartor.aularoomdatabase.data.model.Endereco
-import br.com.msartor.aularoomdatabase.data.model.Produto
-import br.com.msartor.aularoomdatabase.data.model.ProdutoDetalhe
-import br.com.msartor.aularoomdatabase.data.model.Usuario
+import br.com.msartor.aularoomdatabase.data.entity.Conversor
+import br.com.msartor.aularoomdatabase.data.entity.Endereco
+import br.com.msartor.aularoomdatabase.data.entity.Produto
+import br.com.msartor.aularoomdatabase.data.entity.ProdutoDetalhe
+import br.com.msartor.aularoomdatabase.data.entity.Usuario
 
 @Database(
     entities = [
