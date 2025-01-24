@@ -1,4 +1,4 @@
-package br.com.msartor.aularoomdatabase.data.model
+package br.com.msartor.aularoomdatabase.data.entity
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

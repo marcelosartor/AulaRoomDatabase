@@ -1,7 +1,6 @@
-package br.com.msartor.aularoomdatabase.data.model
+package br.com.msartor.aularoomdatabase.data.entity
 
 import androidx.room.ColumnInfo
-import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.ProvidedTypeConverter
