@@ -4,10 +4,13 @@ import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import br.com.msartor.aularoomdatabase.data.BancoDeDados
+import br.com.msartor.aularoomdatabase.data.dao.ClientePedidoDao
 import br.com.msartor.aularoomdatabase.data.dao.EnderecoDao
 import br.com.msartor.aularoomdatabase.data.dao.ProdutoDao
 import br.com.msartor.aularoomdatabase.data.dao.UsuarioDao
+import br.com.msartor.aularoomdatabase.data.entity.Cliente
 import br.com.msartor.aularoomdatabase.data.entity.Endereco
+import br.com.msartor.aularoomdatabase.data.entity.Pedido
 import br.com.msartor.aularoomdatabase.data.entity.Produto
 import br.com.msartor.aularoomdatabase.data.entity.ProdutoDetalhe
 //import br.com.msartor.aularoomdatabase.data.model.Endereco
@@ -28,6 +31,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var usuarioDao: UsuarioDao
     private lateinit var enderecoDao: EnderecoDao
     private lateinit var produtoDao: ProdutoDao
+    private lateinit var clientePedidoDao: ClientePedidoDao
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,12 +42,18 @@ class MainActivity : AppCompatActivity() {
         usuarioDao = bancoDeDados.usuarioDao
         enderecoDao = bancoDeDados.enderecoDao
         produtoDao = bancoDeDados.produtoDao
+        clientePedidoDao = bancoDeDados.clientePedidoDao
 
 
         binding.btnSalvar.setOnClickListener {
             // Exemplo - Salvar Usuario
             //salvarUsuario()
-            salvarProduto()
+
+            // Exemplo - Salvar Produto (one to one)
+            //salvarProduto()
+
+            // Exemplo - Salvar Cliente e Pedido  (one to Many)
+            salvarClientePedido()
 
 
             binding.txtListaDeUsuarios.text = "salvar"
@@ -190,6 +200,19 @@ class MainActivity : AppCompatActivity() {
             )
 
             val produtoDetalheId = produtoDao.salvarProdutoDetalhe(produtoDetalhe)
+        }
+    }
+
+    private fun salvarClientePedido() {
+        val nome = binding.editNome.text.toString()
+        CoroutineScope(Dispatchers.IO).launch {
+            val cliente = Cliente(0,nome,"--")
+            val clienteId = clientePedidoDao.salvarCliente(cliente)
+
+            repeat(3){numero->
+                val pedido = Pedido(0,clienteId,"Produto${numero}", 200.90 + (150*numero.toDouble()))
+                clientePedidoDao.salvarPedido(pedido)
+            }
         }
     }
 }
