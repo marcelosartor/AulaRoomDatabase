@@ -4,10 +4,13 @@ import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import br.com.msartor.aularoomdatabase.data.BancoDeDados
+import br.com.msartor.aularoomdatabase.data.dao.ClientePedidoDao
 import br.com.msartor.aularoomdatabase.data.dao.EnderecoDao
 import br.com.msartor.aularoomdatabase.data.dao.ProdutoDao
 import br.com.msartor.aularoomdatabase.data.dao.UsuarioDao
+import br.com.msartor.aularoomdatabase.data.entity.Cliente
 import br.com.msartor.aularoomdatabase.data.entity.Endereco
+import br.com.msartor.aularoomdatabase.data.entity.Pedido
 import br.com.msartor.aularoomdatabase.data.entity.Produto
 import br.com.msartor.aularoomdatabase.data.entity.ProdutoDetalhe
 //import br.com.msartor.aularoomdatabase.data.model.Endereco
@@ -28,6 +31,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var usuarioDao: UsuarioDao
     private lateinit var enderecoDao: EnderecoDao
     private lateinit var produtoDao: ProdutoDao
+    private lateinit var clientePedidoDao: ClientePedidoDao
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,12 +42,18 @@ class MainActivity : AppCompatActivity() {
         usuarioDao = bancoDeDados.usuarioDao
         enderecoDao = bancoDeDados.enderecoDao
         produtoDao = bancoDeDados.produtoDao
+        clientePedidoDao = bancoDeDados.clientePedidoDao
 
 
         binding.btnSalvar.setOnClickListener {
             // Exemplo - Salvar Usuario
             //salvarUsuario()
-            salvarProduto()
+
+            // Exemplo - Salvar Produto (one to one)
+            //salvarProduto()
+
+            // Exemplo - Salvar Cliente e Pedido  (one to Many)
+            salvarClientePedido()
 
 
             binding.txtListaDeUsuarios.text = "salvar"
@@ -94,37 +104,11 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.btnListar.setOnClickListener{
-            /*
-            CoroutineScope(Dispatchers.IO).launch {
-                val listaUsuario = usuarioDao.listar()
-                var textUsuarios = ""
-                listaUsuario.forEach {
-                    textUsuarios += "\n${it.id}-${it.nome}"+
-                            //"\n[End:${it.endereco.rua.trim()},${it.endereco.numero} ]" +
-                            "\nData: ${it.date}" +
-                            "\nTime: ${it.time}" +
-                            "\nDataTime: ${it.dateTime}" +
-                            "\n----------------------------------------"
-                }
-                withContext( Dispatchers.Main) {
-                    binding.txtListaDeUsuarios.text = textUsuarios
-                }
-            }
-            */
-            CoroutineScope(Dispatchers.IO).launch {
-                val listaProdutos = produtoDao.listarProdutosEProdutoDetalhe()
-                var textProdutos = ""
-                listaProdutos.forEach {
-                      textProdutos += "\n${it.produto.id}-${it.produto.nome}"+
-                            "\nPreço: ${it.produto.preco}" +
-                            "\nMarca: ${it.produtoDetalhe.marca}" +
-                            "\nDescricao: ${it.produtoDetalhe.descricao}" +
-                            "\n----------------------------------------"
-                }
-                withContext( Dispatchers.Main) {
-                    binding.txtListaDeUsuarios.text = textProdutos
-                }
-            }
+            //listarUsuario()
+            //listarProdutos()
+            listarClientesComPedidos()
+
+
 
 
         }
@@ -146,6 +130,60 @@ class MainActivity : AppCompatActivity() {
             }
 
         }
+    }
+
+    private fun listarClientesComPedidos() {
+        CoroutineScope(Dispatchers.IO).launch {
+            val listaClientes = clientePedidoDao.listarClienteComPedidod()
+            var textClientes = ""
+            listaClientes.forEach {
+                textClientes += "\n* ${it.cliente.id}-${it.cliente.nome}"
+                it.pedidos.forEach { it2->
+                    textClientes += "\n   # (${it2.id})${it2.produto} - R$ ${it2.preco}"
+                }
+                textClientes += "\n----------------------------------------"
+            }
+            withContext( Dispatchers.Main) {
+                binding.txtListaDeUsuarios.text = textClientes
+            }
+        }
+    }
+
+    private fun listarProdutos() {
+        CoroutineScope(Dispatchers.IO).launch {
+            val listaProdutos = produtoDao.listarProdutosEProdutoDetalhe()
+            var textProdutos = ""
+            listaProdutos.forEach {
+                textProdutos += "\n${it.produto.id}-${it.produto.nome}"+
+                        "\nPreço: ${it.produto.preco}" +
+                        "\nMarca: ${it.produtoDetalhe.marca}" +
+                        "\nDescricao: ${it.produtoDetalhe.descricao}" +
+                        "\n----------------------------------------"
+            }
+            withContext( Dispatchers.Main) {
+                binding.txtListaDeUsuarios.text = textProdutos
+            }
+        }
+    }
+
+    private fun listarUsuario() {
+
+            CoroutineScope(Dispatchers.IO).launch {
+                val listaUsuario = usuarioDao.listar()
+                var textUsuarios = ""
+                listaUsuario.forEach {
+                    textUsuarios += "\n${it.id}-${it.nome}"+
+                            //"\n[End:${it.endereco.rua.trim()},${it.endereco.numero} ]" +
+                            "\nData: ${it.date}" +
+                            "\nTime: ${it.time}" +
+                            "\nDataTime: ${it.dateTime}" +
+                            "\n----------------------------------------"
+                }
+                withContext( Dispatchers.Main) {
+                    binding.txtListaDeUsuarios.text = textUsuarios
+                }
+            }
+
     }
 
     private fun salvarUsuario() {
@@ -190,6 +228,19 @@ class MainActivity : AppCompatActivity() {
             )
 
             val produtoDetalheId = produtoDao.salvarProdutoDetalhe(produtoDetalhe)
+        }
+    }
+
+    private fun salvarClientePedido() {
+        val nome = binding.editNome.text.toString()
+        CoroutineScope(Dispatchers.IO).launch {
+            val cliente = Cliente(0,nome,"--")
+            val clienteId = clientePedidoDao.salvarCliente(cliente)
+
+            repeat(3){numero->
+                val pedido = Pedido(0,clienteId,"Produto${numero}", 200.90 + (150*numero.toDouble()))
+                clientePedidoDao.salvarPedido(pedido)
+            }
         }
     }
 }
