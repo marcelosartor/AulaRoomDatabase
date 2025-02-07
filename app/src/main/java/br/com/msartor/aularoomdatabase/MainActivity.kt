@@ -104,37 +104,11 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.btnListar.setOnClickListener{
-            /*
-            CoroutineScope(Dispatchers.IO).launch {
-                val listaUsuario = usuarioDao.listar()
-                var textUsuarios = ""
-                listaUsuario.forEach {
-                    textUsuarios += "\n${it.id}-${it.nome}"+
-                            //"\n[End:${it.endereco.rua.trim()},${it.endereco.numero} ]" +
-                            "\nData: ${it.date}" +
-                            "\nTime: ${it.time}" +
-                            "\nDataTime: ${it.dateTime}" +
-                            "\n----------------------------------------"
-                }
-                withContext( Dispatchers.Main) {
-                    binding.txtListaDeUsuarios.text = textUsuarios
-                }
-            }
-            */
-            CoroutineScope(Dispatchers.IO).launch {
-                val listaProdutos = produtoDao.listarProdutosEProdutoDetalhe()
-                var textProdutos = ""
-                listaProdutos.forEach {
-                      textProdutos += "\n${it.produto.id}-${it.produto.nome}"+
-                            "\nPreço: ${it.produto.preco}" +
-                            "\nMarca: ${it.produtoDetalhe.marca}" +
-                            "\nDescricao: ${it.produtoDetalhe.descricao}" +
-                            "\n----------------------------------------"
-                }
-                withContext( Dispatchers.Main) {
-                    binding.txtListaDeUsuarios.text = textProdutos
-                }
-            }
+            //listarUsuario()
+            //listarProdutos()
+            listarClientesComPedidos()
+
+
 
 
         }
@@ -156,6 +130,60 @@ class MainActivity : AppCompatActivity() {
             }
 
         }
+    }
+
+    private fun listarClientesComPedidos() {
+        CoroutineScope(Dispatchers.IO).launch {
+            val listaClientes = clientePedidoDao.listarClienteComPedidod()
+            var textClientes = ""
+            listaClientes.forEach {
+                textClientes += "\n* ${it.cliente.id}-${it.cliente.nome}"
+                it.pedidos.forEach { it2->
+                    textClientes += "\n   # (${it2.id})${it2.produto} - R$ ${it2.preco}"
+                }
+                textClientes += "\n----------------------------------------"
+            }
+            withContext( Dispatchers.Main) {
+                binding.txtListaDeUsuarios.text = textClientes
+            }
+        }
+    }
+
+    private fun listarProdutos() {
+        CoroutineScope(Dispatchers.IO).launch {
+            val listaProdutos = produtoDao.listarProdutosEProdutoDetalhe()
+            var textProdutos = ""
+            listaProdutos.forEach {
+                textProdutos += "\n${it.produto.id}-${it.produto.nome}"+
+                        "\nPreço: ${it.produto.preco}" +
+                        "\nMarca: ${it.produtoDetalhe.marca}" +
+                        "\nDescricao: ${it.produtoDetalhe.descricao}" +
+                        "\n----------------------------------------"
+            }
+            withContext( Dispatchers.Main) {
+                binding.txtListaDeUsuarios.text = textProdutos
+            }
+        }
+    }
+
+    private fun listarUsuario() {
+
+            CoroutineScope(Dispatchers.IO).launch {
+                val listaUsuario = usuarioDao.listar()
+                var textUsuarios = ""
+                listaUsuario.forEach {
+                    textUsuarios += "\n${it.id}-${it.nome}"+
+                            //"\n[End:${it.endereco.rua.trim()},${it.endereco.numero} ]" +
+                            "\nData: ${it.date}" +
+                            "\nTime: ${it.time}" +
+                            "\nDataTime: ${it.dateTime}" +
+                            "\n----------------------------------------"
+                }
+                withContext( Dispatchers.Main) {
+                    binding.txtListaDeUsuarios.text = textUsuarios
+                }
+            }
+
     }
 
     private fun salvarUsuario() {
