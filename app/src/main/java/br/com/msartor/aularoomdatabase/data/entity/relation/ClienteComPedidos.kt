@@ -15,8 +15,8 @@ data class ClienteComPedidos(
     val cliente: Cliente,
 
     @Relation(
-        parentColumn = "id",
-        entityColumn = "cliente_id",
+        parentColumn = "id", // Chave primaria Pedido
+        entityColumn = "cliente_id", // Chave Estrangeira Cliente em Pedido
         entity = Pedido::class
     )
     val pedidos: List<Pedido>
