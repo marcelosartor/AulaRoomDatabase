@@ -8,9 +8,11 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import br.com.msartor.aularoomdatabase.data.dao.ClientePedidoDao
 import br.com.msartor.aularoomdatabase.data.dao.EnderecoDao
+import br.com.msartor.aularoomdatabase.data.dao.PessoaComputadorDao
 import br.com.msartor.aularoomdatabase.data.dao.ProdutoDao
 import br.com.msartor.aularoomdatabase.data.dao.UsuarioDao
 import br.com.msartor.aularoomdatabase.data.entity.Cliente
+import br.com.msartor.aularoomdatabase.data.entity.Computador
 import br.com.msartor.aularoomdatabase.data.migration.Migration2To3
 import br.com.msartor.aularoomdatabase.data.migration.Migration3To4
 import br.com.msartor.aularoomdatabase.data.migration.Migration4To5
@@ -18,6 +20,8 @@ import br.com.msartor.aularoomdatabase.data.migration.Migration5To6
 import br.com.msartor.aularoomdatabase.data.entity.Conversor
 import br.com.msartor.aularoomdatabase.data.entity.Endereco
 import br.com.msartor.aularoomdatabase.data.entity.Pedido
+import br.com.msartor.aularoomdatabase.data.entity.Pessoa
+import br.com.msartor.aularoomdatabase.data.entity.PessoaComputador
 import br.com.msartor.aularoomdatabase.data.entity.Produto
 import br.com.msartor.aularoomdatabase.data.entity.ProdutoDetalhe
 import br.com.msartor.aularoomdatabase.data.entity.Usuario
@@ -29,7 +33,10 @@ import br.com.msartor.aularoomdatabase.data.entity.Usuario
         Produto::class,
         ProdutoDetalhe::class,
         Cliente::class,
-        Pedido::class
+        Pedido::class,
+        Pessoa::class,
+        Computador::class,
+        PessoaComputador::class
     ],
     version = 6,
     autoMigrations = [
@@ -46,6 +53,7 @@ abstract class BancoDeDados: RoomDatabase() {
     abstract val enderecoDao: EnderecoDao
     abstract val produtoDao: ProdutoDao
     abstract val clientePedidoDao: ClientePedidoDao
+    abstract val pessoaComputadorDao: PessoaComputadorDao
 
     companion object {
 

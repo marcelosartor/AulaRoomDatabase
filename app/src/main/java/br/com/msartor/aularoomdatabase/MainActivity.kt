@@ -6,11 +6,15 @@ import androidx.appcompat.app.AppCompatActivity
 import br.com.msartor.aularoomdatabase.data.BancoDeDados
 import br.com.msartor.aularoomdatabase.data.dao.ClientePedidoDao
 import br.com.msartor.aularoomdatabase.data.dao.EnderecoDao
+import br.com.msartor.aularoomdatabase.data.dao.PessoaComputadorDao
 import br.com.msartor.aularoomdatabase.data.dao.ProdutoDao
 import br.com.msartor.aularoomdatabase.data.dao.UsuarioDao
 import br.com.msartor.aularoomdatabase.data.entity.Cliente
+import br.com.msartor.aularoomdatabase.data.entity.Computador
 import br.com.msartor.aularoomdatabase.data.entity.Endereco
 import br.com.msartor.aularoomdatabase.data.entity.Pedido
+import br.com.msartor.aularoomdatabase.data.entity.Pessoa
+import br.com.msartor.aularoomdatabase.data.entity.PessoaComputador
 import br.com.msartor.aularoomdatabase.data.entity.Produto
 import br.com.msartor.aularoomdatabase.data.entity.ProdutoDetalhe
 //import br.com.msartor.aularoomdatabase.data.model.Endereco
@@ -32,6 +36,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var enderecoDao: EnderecoDao
     private lateinit var produtoDao: ProdutoDao
     private lateinit var clientePedidoDao: ClientePedidoDao
+    private lateinit var pessaoComputadorDao: PessoaComputadorDao
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,8 +48,11 @@ class MainActivity : AppCompatActivity() {
         enderecoDao = bancoDeDados.enderecoDao
         produtoDao = bancoDeDados.produtoDao
         clientePedidoDao = bancoDeDados.clientePedidoDao
+        pessaoComputadorDao = bancoDeDados.pessoaComputadorDao
 
-
+        /*----------------------------------------------
+        | Botões                                       |
+        -----------------------------------------------*/
         binding.btnSalvar.setOnClickListener {
             // Exemplo - Salvar Usuario
             //salvarUsuario()
@@ -53,85 +61,87 @@ class MainActivity : AppCompatActivity() {
             //salvarProduto()
 
             // Exemplo - Salvar Cliente e Pedido  (one to Many)
-            salvarClientePedido()
+            //salvarClientePedido()
 
+            // Exemplo - Salvar Pessoa e Computador  (Many to Many)
+            salvarPessoaCompurador()
 
-            binding.txtListaDeUsuarios.text = "salvar"
+            binding.txtListaDeUsuarios.text = "Salvo"
         }
-
-
 
         binding.btnAtualizar.setOnClickListener {
-            val nome = binding.editNome.text.toString()
-            val id = binding.editId.text.toString().toInt()
-            val usuario = Usuario(
-                id,
-                nome,
-                "teste@teste.com",
-                "123456",
-                24,
-                82.0,
-                //Endereco("Carlos J.Gon",61),
-                LocalDate.now(),
-                LocalTime.now(),
-                LocalDateTime.now()
+            atualizarUsuario()
 
-            )
-            CoroutineScope(Dispatchers.IO).launch {
-                usuarioDao.atualizat(usuario)
-            }
-            binding.txtListaDeUsuarios.text = "Remover"
-            binding.txtListaDeUsuarios.text = "Atualizar"
+            binding.txtListaDeUsuarios.text = "Atualizado"
         }
+
         binding.btnRemover.setOnClickListener {
-            val id = binding.editId.text.toString().toInt()
-            val usuario = Usuario(
-                id,
-                "Ruff111",
-                "teste@teste.com",
-                "123456",
-                52,
-                82.0,
-                //Endereco("Carlos JG",61),
-                LocalDate.now(),
-                LocalTime.now(),
-                LocalDateTime.now()
-            )
-            CoroutineScope(Dispatchers.IO).launch {
-                usuarioDao.remover(usuario)
-            }
-            binding.txtListaDeUsuarios.text = "Remover"
+            removerUsuario()
+
+            binding.txtListaDeUsuarios.text = "Removido"
         }
 
         binding.btnListar.setOnClickListener{
             //listarUsuario()
             //listarProdutos()
             listarClientesComPedidos()
-
-
-
-
         }
 
         binding.btnFiltrar.setOnClickListener{
-            CoroutineScope(Dispatchers.IO).launch {
-                val textoPesquisa = binding.editNome.text.toString()
-                val listaUsuario = usuarioDao.filtrar(textoPesquisa)
-                var textUsuarios = ""
-                listaUsuario.forEach {
-                    textUsuarios += "\n${it.id}-${it.nome}" +
-                            //"\n[End:${it.endereco.rua.trim()},${it.endereco.numero} ]" +
-                            "\nData: ${it.date}" +
-                            "\n----------------------------------------"
-                }
-                withContext( Dispatchers.Main) {
-                    binding.txtListaDeUsuarios.text = textUsuarios
-                }
-            }
-
+            listarUsuarioFiltro()
         }
     }
 
+    /*------------------------------------------------
+    | Metodos remover                                |
+     -----------------------------------------------*/
+    private fun removerUsuario() {
+        val id = binding.editId.text.toString().toInt()
+        val usuario = Usuario(
+            id,
+            "Ruff111",
+            "teste@teste.com",
+            "123456",
+            52,
+            82.0,
+            //Endereco("Carlos JG",61),
+            LocalDate.now(),
+            LocalTime.now(),
+            LocalDateTime.now()
+        )
+        CoroutineScope(Dispatchers.IO).launch {
+            usuarioDao.remover(usuario)
+        }
+        binding.txtListaDeUsuarios.text = "Remover"
+    }
+
+    /*------------------------------------------------
+    | Metodos atualizar                              |
+     -----------------------------------------------*/
+    private fun atualizarUsuario() {
+        val nome = binding.editNome.text.toString()
+        val id = binding.editId.text.toString().toInt()
+        val usuario = Usuario(
+            id,
+            nome,
+            "teste@teste.com",
+            "123456",
+            24,
+            82.0,
+            //Endereco("Carlos J.Gon",61),
+            LocalDate.now(),
+            LocalTime.now(),
+            LocalDateTime.now()
+        )
+        CoroutineScope(Dispatchers.IO).launch {
+            usuarioDao.atualizat(usuario)
+        }
+        binding.txtListaDeUsuarios.text = "Atualizar"
+    }
+
+    /*------------------------------------------------
+    | Metodos Listar                                 |
+     -----------------------------------------------*/
     private fun listarClientesComPedidos() {
         CoroutineScope(Dispatchers.IO).launch {
             val listaClientes = clientePedidoDao.listarClienteComPedidod()
@@ -186,6 +196,30 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    /*-----------------------------------------------
+    | Metodos Listar com Filtro                     |
+    -----------------------------------------------*/
+    private fun listarUsuarioFiltro() {
+        CoroutineScope(Dispatchers.IO).launch {
+            val textoPesquisa = binding.editNome.text.toString()
+            val listaUsuario = usuarioDao.filtrar(textoPesquisa)
+            var textUsuarios = ""
+            listaUsuario.forEach {
+                textUsuarios += "\n${it.id}-${it.nome}" +
+                        //"\n[End:${it.endereco.rua.trim()},${it.endereco.numero} ]" +
+                        "\nData: ${it.date}" +
+                        "\n----------------------------------------"
+            }
+            withContext( Dispatchers.Main) {
+                binding.txtListaDeUsuarios.text = textUsuarios
+            }
+        }
+    }
+
+
+    /*------------------------------------------------
+    | Metodos salvar                                 |
+     -----------------------------------------------*/
     private fun salvarUsuario() {
         val nome = binding.editNome.text.toString()
         val usuario = Usuario(
@@ -208,6 +242,7 @@ class MainActivity : AppCompatActivity() {
             usuarioDao.salvar(usuario)
             enderecoDao.salvar(endereco)
         }
+
     }
 
     private fun salvarProduto() {
@@ -241,6 +276,27 @@ class MainActivity : AppCompatActivity() {
                 val pedido = Pedido(0,clienteId,"Produto${numero}", 200.90 + (150*numero.toDouble()))
                 clientePedidoDao.salvarPedido(pedido)
             }
+        }
+    }
+
+    private fun salvarPessoaCompurador() {
+        val nome = binding.editNome.text.toString()
+        CoroutineScope(Dispatchers.IO).launch {
+            val pessoa = Pessoa(0,nome,"M")
+            val pessoaId = pessaoComputadorDao.salvarPessoa(pessoa)
+
+            val computador1 = Computador(0,"Computador1","Dell")
+            val computadorId1 = pessaoComputadorDao.salvarComputador(computador1)
+
+            val computador2 = Computador(0,"Computador2","Avell")
+            val computadorId2 = pessaoComputadorDao.salvarComputador(computador2)
+
+            val pessoaComputador1 = PessoaComputador(pessoaId,computadorId1)
+            val pessoaComputador2 = PessoaComputador(pessoaId,computadorId2)
+
+            pessaoComputadorDao.salvarPessoaComputador(pessoaComputador1)
+            pessaoComputadorDao.salvarPessoaComputador(pessoaComputador2)
+
         }
     }
 }
