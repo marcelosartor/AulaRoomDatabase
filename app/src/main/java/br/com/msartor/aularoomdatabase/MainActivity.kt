@@ -84,7 +84,8 @@ class MainActivity : AppCompatActivity() {
         binding.btnListar.setOnClickListener{
             //listarUsuario()
             //listarProdutos()
-            listarClientesComPedidos()
+            //listarClientesComPedidos()
+            listarPessoaComComputadores()
         }
 
         binding.btnFiltrar.setOnClickListener{
@@ -142,6 +143,23 @@ class MainActivity : AppCompatActivity() {
     /*------------------------------------------------
     | Metodos Listar                                 |
      -----------------------------------------------*/
+    private fun listarPessoaComComputadores(){
+        CoroutineScope(Dispatchers.IO).launch {
+            val listaPessoasComComputadores = pessaoComputadorDao.listarPessoaComComputadores()
+            var textPessoas = ""
+            listaPessoasComComputadores.forEach {
+                textPessoas += "\n* ${it.pessoa.id}-${it.pessoa.nome}"
+                it.computadores.forEach { it2->
+                    textPessoas += "\n   # (${it2.id})${it2.marca} - R$ ${it2.modelo}"
+                }
+                textPessoas += "\n----------------------------------------"
+            }
+            withContext( Dispatchers.Main) {
+                binding.txtListaDeUsuarios.text = textPessoas
+            }
+        }
+    }
+
     private fun listarClientesComPedidos() {
         CoroutineScope(Dispatchers.IO).launch {
             val listaClientes = clientePedidoDao.listarClienteComPedidod()
